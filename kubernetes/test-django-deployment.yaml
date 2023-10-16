@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-django-deployment
+  labels:
+    app: test-django-app
+spec:
+  selector:
+    matchLabels:
+      name: test-django-pod
+  template:
+    metadata:
+      labels:
+        name: test-django-pod
+    spec:
+      containers:
+        - name: django-app
+          image: django-app:1
+          #volumeMounts:
+           # - name: foo
+            #  mountPath: "/etc/foo"
+             # readOnly: true
+          ##envFrom:
+           ## - configMapRef:
+            ##    name: django-app-config
+          ports:
+            - containerPort: 80
+      #volumes:
+       # - name: foo
+        #  configMap:
+         #   name: django-app-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-service
+  labels:
+    service: test-django-service
+spec:
+  type: NodePort
+  selector:
+    name: test-django-pod
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000
