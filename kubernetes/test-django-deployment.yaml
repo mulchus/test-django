@@ -1,37 +1,3 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: test-django-deployment
-  labels:
-    app: test-django-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      name: test-django-pod
-  template:
-    metadata:
-      labels:
-        name: test-django-pod
-    spec:
-      containers:
-        - name: django-app
-          image: django-app:1
-#          volumeMounts:     # ЭТО ВСЕ НЕ ЗАРАБОТАЛО, попробовать позже!!
-#            - name: django-config
-#              mountPath: "/code/django-config"
-#              readOnly: true
-          envFrom:         # это просто взятие переменных из ConfigMap
-            - configMapRef:
-                name: django-config-file
-          ports:
-            - containerPort: 80
-#      volumes:          # ЭТО ВСЕ НЕ ЗАРАБОТАЛО, попробовать позже!!
-#        - name: django-config
-#          configMap:
-#            name: django-config-file
-
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -46,4 +12,30 @@ spec:
     - port: 80
       targetPort: 80
       protocol: TCP
-      #nodePort: 30000
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-django-deployment
+  labels:
+    app: test-django-app
+spec:
+  serviceName: "django-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      name: test-django-pod
+  template:
+    metadata:
+      labels:
+        name: test-django-pod
+    spec:
+      containers:
+        - name: django-app
+          image: django-app:1
+          envFrom:         # это просто взятие переменных из ConfigMap
+            - configMapRef:
+                name: django-config-file
+          ports:
+            - containerPort: 80

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: django-clearsessions
+  labels:
+    purpose: django-clearsessions
+spec:
+  containers:
+  - name: django-clearsessions
+    image: django-app:1
+    envFrom:
+      - configMapRef:
+          name: django-config-file
+    command: ["python"]
+    args: ["manage.py", "clearsessions"]
+  restartPolicy: OnFailure
