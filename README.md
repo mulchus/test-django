@@ -45,13 +45,13 @@ kubectl apply -f ../kubernetes/ingress-hosts.yaml               # добавля
 ```
 
 В каталоге проекта запустите поочередно следующие команды:   
-
 ```shell-session
 kubectl apply -f ../kubernetes/configmap.yaml                 # создаём/обновляем переменные ConfigMap
 kubectl apply -f ../kubernetes/test-django-deployment.yaml    # создаем деплоймент проекта с подами, сервисом
 kubectl get pods                                              # получаем имена подов
 kubectl exec -it <имя пода> -- python manage.py migrate       # подготавливаем БД (если подключаемся к пустой БД)
 kubectl exec -it <имя пода> -- python manage.py createsuperuser --no-input    # создаем суперпользователя БД из данных в configmap.yaml
+kubectl apply -f ../kubernetes/django-clearsessions.yaml      # создаем задачу ежедневного удаления старых сессий Django    
 ```
 
 Получите адрес сайта и занесите его в [файл hosts на вашем сервере: ]( https://help.reg.ru/support/dns-servery-i-nastroyka-zony/rabota-s-dns-serverami/fayl-hosts-gde-nakhoditsya-i-kak-yego-izmenit)

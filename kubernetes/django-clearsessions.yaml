@@ -1,16 +1,25 @@
-apiVersion: v1
-kind: Pod
+apiVersion: batch/v1
+kind: CronJob
 metadata:
   name: django-clearsessions
   labels:
     purpose: django-clearsessions
 spec:
-  containers:
-  - name: django-clearsessions
-    image: django-app:1
-    envFrom:
-      - configMapRef:
-          name: django-config-file
-    command: ["python"]
-    args: ["manage.py", "clearsessions"]
-  restartPolicy: OnFailure
+  schedule: "00 23 * * *"     # minute - hour - day of the month - month - day of the week
+                              #(0 - 59)  (0 - 23) (1 - 31)        (1 - 12)  (0 - 6) OR sun, mon, tue, wed, thu, fri, sat
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: django-app
+            image: django-app:1
+            imagePullPolicy: IfNotPresent
+            envFrom:
+              - configMapRef:
+                  name: django-config-file
+            command:
+            - python
+            - manage.py
+            - clearsessions
+          restartPolicy: OnFailure
