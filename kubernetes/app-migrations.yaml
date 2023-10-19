@@ -5,7 +5,8 @@ metadata:
   labels:
     purpose: migrations
 spec:
-  activeDeadlineSeconds: 120
+  backoffLimit: 1             # количество попыток += 1
+  activeDeadlineSeconds: 120  # общее время неуспеха и удаление
   ttlSecondsAfterFinished: 1
   template:
     metadata:
@@ -20,7 +21,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: django-config-file
-          command:
-            - python
-            - manage.py
-            - migrate
+          command: [ "/bin/sh","-c" ]
+          args: [ "python manage.py migrate && python manage.py createsuperuser --no-input" ]
+#          command:
+#            - python
+#            - manage.py
+#            - migrate
