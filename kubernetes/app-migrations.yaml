@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations
+  labels:
+    purpose: migrations
+spec:
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 1
+  template:
+    metadata:
+      labels:
+        purpose: django-migrations
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: django-app
+          image: django-app:1
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: django-config-file
+          command:
+            - python
+            - manage.py
+            - migrate
