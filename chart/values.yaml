@@ -1,0 +1,7 @@
+# default values for this chart
+
+container:
+  image: django-app:1
+
+host: star-burger.test
+path: /

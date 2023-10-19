@@ -1,0 +1,5 @@
+# файл с технической информацией о графике (charte)
+
+apiVersion: v2
+name: Api-HelmChart
+version: 1.0.1

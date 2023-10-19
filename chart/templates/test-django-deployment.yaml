@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-service-{{ .Release.Name }}
+  labels:
+    service: test-django-service-{{ .Release.Name }}
+spec:
+  type: NodePort
+  selector:
+    name: test-django-pod-{{ .Release.Name }}
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-django-pod-{{ .Release.Name }}
+  labels:
+    app: test-django-app-{{ .Release.Name }}
+spec:
+  serviceName: "django-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      name: test-django-pod-{{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        name: test-django-pod-{{ .Release.Name }}
+    spec:
+      containers:
+        - name: django-app-{{ .Release.Name }}
+          image: {{ .Values.container.image }}
+          envFrom:         # это просто взятие переменных из ConfigMap
+            - configMapRef:
+                name: django-config-file-{{ .Release.Name }}
+          ports:
+            - containerPort: 80

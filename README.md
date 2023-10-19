@@ -41,28 +41,31 @@ data:
 Подключите внешний сервис minikube ingress для доступа по внешнему IP
 ```shell-session
 minikube addons enable ingress
-kubectl apply -f ../kubernetes/ingress-hosts.yaml               # добавляем ingress rules для маршрутизации обращений 
 ```
 
-В каталоге проекта запустите поочередно следующие команды:   
+Установте приложение [HELM](https://helm.sh/) 
+В каталоге проекта запустите:
 ```shell-session
+helm install <версия деплоя> ../chart/
+```
+
+или без установки HELM - поочередно следующие команды:   
+```shell-session
+kubectl apply -f ../kubernetes/ingress-hosts.yaml             # добавляем ingress rules для маршрутизации обращений 
 kubectl apply -f ../kubernetes/configmap.yaml                 # создаём/обновляем переменные ConfigMap
 kubectl apply -f ../kubernetes/test-django-deployment.yaml    # создаем деплоймент проекта с подами, сервисом
-kubectl get pods                                              # получаем имена подов
-kubectl exec -it <имя пода> -- python manage.py migrate       # подготавливаем БД (если подключаемся к пустой БД)
-kubectl exec -it <имя пода> -- python manage.py createsuperuser --no-input    # создаем суперпользователя БД из данных в configmap.yaml
+kubectl apply -f ../kubernetes/app-migrations.yaml            # подготавливаем БД (если подключаемся к пустой БД)
 kubectl apply -f ../kubernetes/django-clearsessions.yaml      # создаем задачу ежедневного удаления старых сессий Django    
 ```
 
-Получите адрес сайта и занесите его в [файл hosts на вашем сервере: ]( https://help.reg.ru/support/dns-servery-i-nastroyka-zony/rabota-s-dns-serverami/fayl-hosts-gde-nakhoditsya-i-kak-yego-izmenit)
+Получите IP-адрес сайта и занесите его в [файл hosts на вашем сервере: ](https://help.reg.ru/support/dns-servery-i-nastroyka-zony/rabota-s-dns-serverami/fayl-hosts-gde-nakhoditsya-i-kak-yego-izmenit)
 ```shell-session
 kubectl get ingress
 ```
-в hosts с правами администратора добавляем в конце запись вида 
+В hosts с правами администратора добавляем в конце запись вида  
 ```
 192.168.59.107 star-burger.test
 ```
-
 
 Если обновились какие либо переменные в `configmap.yaml`:  
 

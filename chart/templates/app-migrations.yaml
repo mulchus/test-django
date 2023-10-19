@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations-{{ .Release.Name }}
+  labels:
+    purpose: migrations-{{ .Release.Name }}
+spec:
+  backoffLimit: 1             # количество попыток += 1
+  activeDeadlineSeconds: 120  # общее время неуспеха и удаление
+  ttlSecondsAfterFinished: 1
+  template:
+    metadata:
+      labels:
+        purpose: django-migrations-{{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: django-app-{{ .Release.Name }}
+          image: {{ .Values.container.image }}
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: django-config-file-{{ .Release.Name }}
+          command: [ "/bin/sh","-c" ]
+          args: [ "python manage.py migrate && python manage.py createsuperuser --no-input" ]
+#          command:
+#            - python
+#            - manage.py
+#            - migrate

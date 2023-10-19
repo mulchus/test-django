@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: django-clearsessions-{{ .Release.Name }}
+  labels:
+    purpose: django-clearsessions-{{ .Release.Name }}
+
+spec:
+  schedule: "00 23 * * *"     # minute - hour - day of the month - month - day of the week
+                             #(0 - 59)  (0 - 23) (1 - 31)        (1 - 12)  (0 - 6) OR sun, mon, tue, wed, thu, fri, sat
+  startingDeadlineSeconds: 43200
+
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 5
+
+      template:
+        spec:
+          containers:
+          - name: django-app-{{ .Release.Name }}
+            image: {{ .Values.container.image }}
+            imagePullPolicy: IfNotPresent
+            envFrom:
+              - configMapRef:
+                  name: django-config-file-{{ .Release.Name }}
+            command:
+            - python
+            - manage.py
+            - clearsessions
+          restartPolicy: OnFailure

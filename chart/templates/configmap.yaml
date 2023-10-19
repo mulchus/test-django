@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-config-file-{{ .Release.Name }}
+data:       # переменные берутся отсюда
+  SECRET_KEY: "django-insecure-s1%(je38#$2dx-h#9=%x57uun*$1!kqanc7djblp%ttj8y0v5p"
+  DEBUG: "False"
+  ALLOWED_HOSTS: "127.0.0.1,localhost,192.168.59.106,172.18.157.9,star-burger.test"
+  DATABASE_URL: "postgres://postgres:123@testoftest.ru:5432/postgres"
+  DJANGO_SUPERUSER_PASSWORD: "123"
+  DJANGO_SUPERUSER_EMAIL: "xxx@email.com"
+  DJANGO_SUPERUSER_USERNAME: "root3"
+
+#  django-config.json: | # переменная сохраняется в файл - ЭТО ВСЕ НЕ ЗАРАБОТАЛО!!
+#    {
+#      "DEBUG": false,
+#      "security_type": "friends",
+#      "secure_cookie": false,
+#      "allowed": "*"
+#    }
+
+
