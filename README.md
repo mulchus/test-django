@@ -38,6 +38,11 @@ data:
   DJANGO_SUPERUSER_USERNAME: "ваше имя админа"
 ```
 
+Подключите внешний сервис minikube ingress для доступа по внешнему IP
+```shell-session
+minikube addons enable ingress
+kubectl apply -f ../kubernetes/ingress-hosts.yaml               # добавляем ingress rules для маршрутизации обращений 
+```
 
 В каталоге проекта запустите поочередно следующие команды:   
 
@@ -49,11 +54,13 @@ kubectl exec -it <имя пода> -- python manage.py migrate       # подг�
 kubectl exec -it <имя пода> -- python manage.py createsuperuser --no-input    # создаем суперпользователя БД из данных в configmap.yaml
 ```
 
-Адрес сайта:  
+Получите адрес сайта и занесите его в [файл hosts на вашем сервере: ]( https://help.reg.ru/support/dns-servery-i-nastroyka-zony/rabota-s-dns-serverami/fayl-hosts-gde-nakhoditsya-i-kak-yego-izmenit)
 ```shell-session
-minikube service django-service --url
-или
-minikube service list
+kubectl get ingress
+```
+в hosts с правами администратора добавляем в конце запись вида 
+```
+192.168.59.107 star-burger.test
 ```
 
 
