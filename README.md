@@ -27,7 +27,7 @@ minikube image ls --format=table        # посмотреть результа�
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: django-config-file
+  name: django-config-file-{{ .Release.Name }}
 data:
   SECRET_KEY: "секретный ключ Django"
   DEBUG: "False" 
@@ -43,7 +43,7 @@ data:
 minikube addons enable ingress
 ```
 
-Установте приложение [HELM](https://helm.sh/) 
+Установте приложение [HELM](https://helm.sh/)   
 В каталоге проекта запустите:
 ```shell-session
 helm install <версия деплоя> ../chart/
