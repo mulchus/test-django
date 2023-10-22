@@ -42,6 +42,11 @@ data:
 ```shell-session
 minikube addons enable ingress
 ```
+и проверьте результат установки:
+```shell-session
+kubectl get all -n ingress-nginx
+```
+
 
 Установте приложение [HELM](https://helm.sh/)   
 В каталоге проекта запустите:
@@ -57,6 +62,17 @@ kubectl apply -f ../kubernetes/test-django-deployment.yaml    # создаем �
 kubectl apply -f ../kubernetes/app-migrations.yaml            # подготавливаем БД (если подключаемся к пустой БД)
 kubectl apply -f ../kubernetes/django-clearsessions.yaml      # создаем задачу ежедневного удаления старых сессий Django    
 ```
+
+Проверьте результат запуска:  
+```shell-session
+kubectl get all
+```
+и при наличии ошибок - подробно изучите детализацию конкретного элемента системы:  
+например pod'a `test-django-pod-v1-6bd95b7f45-2s4pc`
+```shell-session
+kubectl describe pod/test-django-pod-v1-6bd95b7f45-2s4pc
+```
+    
 
 Получите IP-адрес сайта и занесите его в [файл hosts на вашем сервере: ](https://help.reg.ru/support/dns-servery-i-nastroyka-zony/rabota-s-dns-serverami/fayl-hosts-gde-nakhoditsya-i-kak-yego-izmenit)
 ```shell-session

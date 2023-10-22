@@ -15,13 +15,12 @@ spec:
 
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: test-django-pod-{{ .Release.Name }}
   labels:
     app: test-django-app-{{ .Release.Name }}
 spec:
-  serviceName: "django-service"
   replicas: 1
   selector:
     matchLabels:
