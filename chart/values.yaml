@@ -1,7 +1,7 @@
 # default values for this chart
 
 container:
-  image: django-app:1
+  image: mulchus/django-app:cec55e78
 
 host: star-burger.test
 path: /
