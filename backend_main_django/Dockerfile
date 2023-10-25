@@ -12,6 +12,15 @@ RUN apt update && apt install -y python3-pip                                  \
 COPY unit_config.json /docker-entrypoint.d/
 COPY . /code/
 RUN SECRET_KEY=empty python manage.py collectstatic --noinput
+
+# Подготовка к подключению к внешнему postgresql (get sertificate)
+RUN apt-get update && \
+    apt-get install wget postgresql-client --yes && \
+    mkdir --parents ~/.postgresql && \
+    wget "https://storage.yandexcloud.net/cloud-certs/CA.pem" \
+         --output-document ~/.postgresql/root.crt && \
+    chmod 0600 ~/.postgresql/root.crt
+
 EXPOSE 80
 VOLUME ["/media"]
 #ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8080"]
