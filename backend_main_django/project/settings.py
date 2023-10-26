@@ -18,6 +18,17 @@ from environs import Env
 env = Env()
 env.read_env()
 
+postgres_username = env.str('POSTGRES_USERNAME', '')
+print(postgres_username)
+postgres_password = env.str('POSTGRES_PASSWORD', '')
+print(postgres_password)
+postgres_port = env.str('POSTGRES_PORT', '')
+print(postgres_port)
+postgres_name = env.str('POSTGRES_NAME', '')
+print(postgres_name)
+postgres_host = env.str('POSTGRES_HOST', '')
+print(postgres_host)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -78,7 +89,10 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': env.dj_db_url('DATABASE_URL', 'postgres://...'),
+    'default': env.dj_db_url(
+        'DATABASE_URL',
+        f'postgres://{postgres_username}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_name}'
+    ),
 }
 
 
