@@ -92,9 +92,10 @@ DATABASES = {
     'default': env.dj_db_url(
         'DATABASE_URL',
         f'postgres://{postgres_username}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_name}'
+
     ),
 }
-
+print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
