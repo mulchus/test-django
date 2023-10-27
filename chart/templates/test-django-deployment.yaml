@@ -33,6 +33,7 @@ spec:
       containers:
         - name: django-app-{{ .Release.Name }}
           image: {{ .Values.container.image }}
+          imagePullPolicy: "IfNotPresent"
           envFrom:         # это просто взятие переменных из ConfigMap
             - configMapRef:
                 name: django-config-file-{{ .Release.Name }}
