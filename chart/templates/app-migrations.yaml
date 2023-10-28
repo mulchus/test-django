@@ -23,7 +23,29 @@ spec:
                 name: django-config-file-{{ .Release.Name }}
           command: [ "/bin/sh","-c" ]
           args: [ "python manage.py migrate && python manage.py createsuperuser --no-input" ]
-#          command:
-#            - python
-#            - manage.py
-#            - migrate
+          env:
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: password
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: host
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: port
+            - name: POSTGRES_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: name
