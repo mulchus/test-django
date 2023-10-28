@@ -1,7 +1,7 @@
 # default values for this chart
 
 container:
-  image: mulchus/django-app:fa94902c-01
+  image: mulchus/django-app:fa94902c-07
 
 host: edu-stoic-dubinsky.sirius-k8s.dvmn.org
 path: /

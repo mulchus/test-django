@@ -1,6 +1,7 @@
 FROM nginx/unit:1.25.0-python3.9
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV PGSSLCERT /tmp/postgresql.crt
 
 WORKDIR /code
 COPY requirements.txt /code/
@@ -23,4 +24,3 @@ RUN apt-get update && \
 
 EXPOSE 80
 VOLUME ["/media"]
-#ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8080"]

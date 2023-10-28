@@ -19,15 +19,15 @@ env = Env()
 env.read_env()
 
 postgres_username = env.str('POSTGRES_USERNAME', '')
-print(postgres_username)
 postgres_password = env.str('POSTGRES_PASSWORD', '')
-print(postgres_password)
-postgres_port = env.str('POSTGRES_PORT', '')
-print(postgres_port)
 postgres_name = env.str('POSTGRES_NAME', '')
-print(postgres_name)
+postgres_port = env.str('POSTGRES_PORT', '')
 postgres_host = env.str('POSTGRES_HOST', '')
-print(postgres_host)
+# print(postgres_username)
+# print(postgres_password)
+# print(postgres_host)
+# print(postgres_port)
+# print(postgres_name)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -92,10 +92,9 @@ DATABASES = {
     'default': env.dj_db_url(
         'DATABASE_URL',
         f'postgres://{postgres_username}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_name}'
-
     ),
 }
-print(DATABASES)
+# print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
