@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: clearsessions-{{ .Release.Name }}
+  labels:
+    purpose: clearsessions-{{ .Release.Name }}
+spec:
+  backoffLimit: 1             # количество попыток += 1
+  activeDeadlineSeconds: 120  # общее время неуспеха и удаление
+  ttlSecondsAfterFinished: 1
+  template:
+    metadata:
+      labels:
+        purpose: django-clearsessions-{{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: django-app-{{ .Release.Name }}
+          image: {{ .Values.container.image }}
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: django-config-file-{{ .Release.Name }}
+          command: [ "/bin/sh","-c" ]
+          args: [ "python manage.py clearsessions && echo 'Clearsessions finish!'" ]
+          env:
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: password
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: host
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: port
+            - name: POSTGRES_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: name
